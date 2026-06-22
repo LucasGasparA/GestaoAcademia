@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import api from '../api/api';
 import Pagination from '../components/Pagination';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { IconSearch, IconEdit, IconTrash, IconEmptyBox } from '../components/Icons';
+import CrudLegend from '../components/CrudLegend';
 
 const EMPTY = {
   nome: '', descricao: '', valor_mensal: '', duracao_meses: '', ativo: true,
@@ -114,10 +116,17 @@ export default function Planos() {
         <button className="btn btn-primary" onClick={openNew}>+ Novo Plano</button>
       </div>
 
+      <CrudLegend
+        create='Botão "+ Novo Plano" acima — insere um novo plano no banco.'
+        read="Barra de busca e tabela abaixo — consulta e lista os planos cadastrados."
+        update='Botão "Editar" em cada linha — atualiza os dados de um plano existente.'
+        delete='Ícone de lixeira em cada linha — remove um plano do banco.'
+      />
+
       <div className="card">
         <div className="search-bar">
           <div className="search-input-wrap">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><IconSearch width={13} height={13} /></span>
             <input
               placeholder="Buscar por nome ou descrição..."
               value={search}
@@ -132,7 +141,7 @@ export default function Planos() {
             <div className="loading"><div className="spinner" /> Carregando...</div>
           ) : paginated.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📋</div>
+              <div className="empty-icon"><IconEmptyBox /></div>
               <p>Nenhum plano encontrado</p>
             </div>
           ) : (
@@ -165,8 +174,8 @@ export default function Planos() {
                     </td>
                     <td>
                       <div className="td-actions">
-                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}>✏️ Editar</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_plano)}>🗑️</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}><IconEdit width={12} height={12} /> Editar</button>
+                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_plano)}><IconTrash width={12} height={12} /></button>
                       </div>
                     </td>
                   </tr>

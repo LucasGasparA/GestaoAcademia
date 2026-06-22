@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { addLog } = require('../activityLog');
 
 router.get('/', async (req, res) => {
   try {
@@ -58,6 +59,7 @@ router.post('/', async (req, res) => {
        VALUES ($1,$2,$3,$4,$5) RETURNING *`,
       [id_aluno, id_plano, data_inicio, data_fim, status || 'ativa']
     );
+    addLog('matricula', 'CREATE', `Matrícula criada: #${result.rows[0].id_matricula} (aluno #${id_aluno}, plano #${id_plano})`);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -73,6 +75,7 @@ router.put('/:id', async (req, res) => {
       [id_aluno, id_plano, data_inicio, data_fim, status, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Matrícula não encontrada' });
+    addLog('matricula', 'UPDATE', `Matrícula atualizada: #${result.rows[0].id_matricula}`);
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -86,6 +89,7 @@ router.delete('/:id', async (req, res) => {
       [req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Matrícula não encontrada' });
+    addLog('matricula', 'DELETE', `Matrícula excluída: #${result.rows[0].id_matricula}`);
     res.json({ message: 'Matrícula excluída com sucesso' });
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { addLog } = require('../activityLog');
 
 router.get('/', async (req, res) => {
   try {
@@ -44,6 +45,7 @@ router.post('/', async (req, res) => {
       'INSERT INTO plano (nome, descricao, valor_mensal, duracao_meses, ativo) VALUES ($1,$2,$3,$4,$5) RETURNING *',
       [nome, descricao, valor_mensal, duracao_meses, ativo ?? true]
     );
+    addLog('plano', 'CREATE', `Plano criado: ${result.rows[0].nome} (#${result.rows[0].id_plano})`);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -58,6 +60,7 @@ router.put('/:id', async (req, res) => {
       [nome, descricao, valor_mensal, duracao_meses, ativo, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Plano não encontrado' });
+    addLog('plano', 'UPDATE', `Plano atualizado: ${result.rows[0].nome} (#${result.rows[0].id_plano})`);
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -71,6 +74,7 @@ router.delete('/:id', async (req, res) => {
       [req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Plano não encontrado' });
+    addLog('plano', 'DELETE', `Plano excluído: ${result.rows[0].nome} (#${result.rows[0].id_plano})`);
     res.json({ message: 'Plano excluído com sucesso' });
   } catch (err) {
     res.status(500).json({ error: err.message });

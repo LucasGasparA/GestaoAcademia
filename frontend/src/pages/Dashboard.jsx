@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/api';
+import { IconUser, IconBadge, IconLayers, IconClipboard, IconCoin, IconActivity } from '../components/Icons';
 
 const MODULES = [
-  { key: 'alunos',      label: 'Alunos',           icon: '◉', path: '/alunos',      to: '/alunos' },
-  { key: 'instrutores', label: 'Instrutores',       icon: '◈', path: '/instrutores', to: '/instrutores' },
-  { key: 'planos',      label: 'Planos ativos',     icon: '◧', path: '/planos',      to: '/planos' },
-  { key: 'matriculas',  label: 'Matrículas',        icon: '◫', path: '/matriculas',  to: '/matriculas' },
-  { key: 'pagamentos',  label: 'Pagamentos',        icon: '◬', path: '/pagamentos',  to: '/pagamentos' },
-  { key: 'avaliacoes',  label: 'Avaliações',        icon: '◭', path: '/avaliacoes',  to: '/avaliacoes' },
+  { key: 'alunos',      label: 'Alunos',           Icon: IconUser,      path: '/alunos',      to: '/alunos' },
+  { key: 'instrutores', label: 'Instrutores',      Icon: IconBadge,     path: '/instrutores', to: '/instrutores' },
+  { key: 'planos',      label: 'Planos ativos',    Icon: IconLayers,    path: '/planos',      to: '/planos' },
+  { key: 'matriculas',  label: 'Matrículas',       Icon: IconClipboard, path: '/matriculas',  to: '/matriculas' },
+  { key: 'pagamentos',  label: 'Pagamentos',       Icon: IconCoin,      path: '/pagamentos',  to: '/pagamentos' },
+  { key: 'avaliacoes',  label: 'Avaliações',       Icon: IconActivity,  path: '/avaliacoes',  to: '/avaliacoes' },
 ];
 
 export default function Dashboard() {
@@ -27,7 +28,7 @@ export default function Dashboard() {
       <div className="page-header">
         <div>
           <h2>Visão geral</h2>
-          <p>Resumo de todos os módulos do sistema</p>
+          <p>// resumo de todos os módulos do sistema</p>
         </div>
       </div>
 
@@ -43,10 +44,10 @@ export default function Dashboard() {
             >
               <div className="stat-card">
                 <div className="stat-icon">
-                  <span style={{ fontSize: 16 }}>{m.icon}</span>
+                  <m.Icon width={18} height={18} />
                 </div>
                 <div className="stat-info">
-                  <h3>{counts[m.key] ?? 0}</h3>
+                  <h3>{String(counts[m.key] ?? 0).padStart(2, '0')}</h3>
                   <p>{m.label}</p>
                 </div>
               </div>
@@ -56,7 +57,7 @@ export default function Dashboard() {
       )}
 
       <div className="welcome-card">
-        <h3>Bem-vindo ao FitAcademia</h3>
+        <h3>Bem-vindo ao FIT//ACADEMIA</h3>
         <p>
           Gerencie alunos, instrutores, planos, matrículas, pagamentos e avaliações físicas.
           Use o menu lateral para navegar entre os módulos ou clique nos cards acima.

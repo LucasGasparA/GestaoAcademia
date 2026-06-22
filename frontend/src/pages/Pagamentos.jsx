@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import api from '../api/api';
 import Pagination from '../components/Pagination';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { IconSearch, IconEdit, IconTrash, IconEmptyBox } from '../components/Icons';
+import CrudLegend from '../components/CrudLegend';
 
 const EMPTY = {
   id_matricula: '', valor: '', data_vencimento: '',
@@ -138,10 +140,17 @@ export default function Pagamentos() {
         <button className="btn btn-primary" onClick={openNew}>+ Novo Pagamento</button>
       </div>
 
+      <CrudLegend
+        create='Botão "+ Novo Pagamento" acima — registra um novo pagamento no banco.'
+        read="Barra de busca e tabela abaixo — consulta e lista os pagamentos cadastrados."
+        update='Botão "Editar" em cada linha — atualiza os dados de um pagamento existente.'
+        delete='Ícone de lixeira em cada linha — remove um pagamento do banco.'
+      />
+
       <div className="card">
         <div className="search-bar">
           <div className="search-input-wrap">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><IconSearch width={13} height={13} /></span>
             <input
               placeholder="Buscar por aluno, plano ou forma de pagamento..."
               value={search}
@@ -156,7 +165,7 @@ export default function Pagamentos() {
             <div className="loading"><div className="spinner" /> Carregando...</div>
           ) : paginated.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">💳</div>
+              <div className="empty-icon"><IconEmptyBox /></div>
               <p>Nenhum pagamento encontrado</p>
             </div>
           ) : (
@@ -189,8 +198,8 @@ export default function Pagamentos() {
                     </td>
                     <td>
                       <div className="td-actions">
-                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}>✏️ Editar</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_pagamento)}>🗑️</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}><IconEdit width={12} height={12} /> Editar</button>
+                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_pagamento)}><IconTrash width={12} height={12} /></button>
                       </div>
                     </td>
                   </tr>

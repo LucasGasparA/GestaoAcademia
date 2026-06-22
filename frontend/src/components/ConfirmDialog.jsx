@@ -1,8 +1,10 @@
+import { IconAlert } from './Icons';
+
 export default function ConfirmDialog({ message, onConfirm, onCancel }) {
   return (
     <div className="confirm-overlay">
       <div className="confirm-box">
-        <div className="confirm-icon">⚠️</div>
+        <div className="confirm-icon"><IconAlert width={26} height={26} /></div>
         <h4>Confirmar exclusão</h4>
         <p>{message || 'Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.'}</p>
         <div className="confirm-actions">

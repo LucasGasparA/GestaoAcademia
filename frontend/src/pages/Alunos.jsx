@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import api from '../api/api';
 import Pagination from '../components/Pagination';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { IconSearch, IconEdit, IconTrash, IconEmptyBox } from '../components/Icons';
+import CrudLegend from '../components/CrudLegend';
 
 const EMPTY = {
   nome: '', cpf: '', email: '', telefone: '',
@@ -139,10 +141,17 @@ export default function Alunos() {
         <button className="btn btn-primary" onClick={openNew}>+ Novo Aluno</button>
       </div>
 
+      <CrudLegend
+        create='Botão "+ Novo Aluno" acima — insere um novo aluno no banco.'
+        read="Barra de busca e tabela abaixo — consulta e lista os alunos cadastrados."
+        update='Botão "Editar" em cada linha — atualiza os dados de um aluno existente.'
+        delete='Ícone de lixeira em cada linha — remove um aluno do banco.'
+      />
+
       <div className="card">
         <div className="search-bar">
           <div className="search-input-wrap">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><IconSearch width={13} height={13} /></span>
             <input
               placeholder="Buscar por nome, CPF ou e-mail..."
               value={search}
@@ -157,7 +166,7 @@ export default function Alunos() {
             <div className="loading"><div className="spinner" /> Carregando...</div>
           ) : paginated.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">👤</div>
+              <div className="empty-icon"><IconEmptyBox /></div>
               <p>Nenhum aluno encontrado</p>
             </div>
           ) : (
@@ -192,8 +201,8 @@ export default function Alunos() {
                     </td>
                     <td>
                       <div className="td-actions">
-                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}>✏️ Editar</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_aluno)}>🗑️</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}><IconEdit width={12} height={12} /> Editar</button>
+                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_aluno)}><IconTrash width={12} height={12} /></button>
                       </div>
                     </td>
                   </tr>

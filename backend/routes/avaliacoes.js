@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { addLog } = require('../activityLog');
 
 router.get('/', async (req, res) => {
   try {
@@ -42,6 +43,7 @@ router.post('/', async (req, res) => {
        VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
       [id_aluno, id_instrutor, data_avaliacao, peso, altura, percentual_gordura || null, observacoes || null]
     );
+    addLog('avaliacao_fisica', 'CREATE', `Avaliação registrada: #${result.rows[0].id_avaliacao} (aluno #${id_aluno})`);
     res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -57,6 +59,7 @@ router.put('/:id', async (req, res) => {
       [id_aluno, id_instrutor, data_avaliacao, peso, altura, percentual_gordura || null, observacoes || null, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Avaliação não encontrada' });
+    addLog('avaliacao_fisica', 'UPDATE', `Avaliação atualizada: #${result.rows[0].id_avaliacao}`);
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -70,6 +73,7 @@ router.delete('/:id', async (req, res) => {
       [req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Avaliação não encontrada' });
+    addLog('avaliacao_fisica', 'DELETE', `Avaliação excluída: #${result.rows[0].id_avaliacao}`);
     res.json({ message: 'Avaliação excluída com sucesso' });
   } catch (err) {
     res.status(500).json({ error: err.message });

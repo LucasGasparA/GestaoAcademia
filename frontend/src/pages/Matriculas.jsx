@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import api from '../api/api';
 import Pagination from '../components/Pagination';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { IconSearch, IconEdit, IconTrash, IconEmptyBox } from '../components/Icons';
+import CrudLegend from '../components/CrudLegend';
 
 const EMPTY = {
   id_aluno: '', id_plano: '', data_inicio: '', data_fim: '', status: 'ativa',
@@ -129,10 +131,17 @@ export default function Matriculas() {
         <button className="btn btn-primary" onClick={openNew}>+ Nova Matrícula</button>
       </div>
 
+      <CrudLegend
+        create='Botão "+ Nova Matrícula" acima — insere uma nova matrícula vinculando aluno e plano.'
+        read="Barra de busca e tabela abaixo — consulta e lista as matrículas cadastradas."
+        update='Botão "Editar" em cada linha — atualiza os dados de uma matrícula existente.'
+        delete='Ícone de lixeira em cada linha — remove uma matrícula do banco.'
+      />
+
       <div className="card">
         <div className="search-bar">
           <div className="search-input-wrap">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><IconSearch width={13} height={13} /></span>
             <input
               placeholder="Buscar por aluno ou plano..."
               value={search}
@@ -147,7 +156,7 @@ export default function Matriculas() {
             <div className="loading"><div className="spinner" /> Carregando...</div>
           ) : paginated.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📝</div>
+              <div className="empty-icon"><IconEmptyBox /></div>
               <p>Nenhuma matrícula encontrada</p>
             </div>
           ) : (
@@ -176,8 +185,8 @@ export default function Matriculas() {
                     </td>
                     <td>
                       <div className="td-actions">
-                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}>✏️ Editar</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_matricula)}>🗑️</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}><IconEdit width={12} height={12} /> Editar</button>
+                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_matricula)}><IconTrash width={12} height={12} /></button>
                       </div>
                     </td>
                   </tr>

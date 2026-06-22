@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import api from '../api/api';
 import Pagination from '../components/Pagination';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { IconSearch, IconEdit, IconTrash, IconEmptyBox } from '../components/Icons';
+import CrudLegend from '../components/CrudLegend';
 
 const EMPTY = {
   id_aluno: '', id_instrutor: '', data_avaliacao: '',
@@ -145,10 +147,17 @@ export default function AvaliacoesFisicas() {
         <button className="btn btn-primary" onClick={openNew}>+ Nova Avaliação</button>
       </div>
 
+      <CrudLegend
+        create='Botão "+ Nova Avaliação" acima — registra uma nova avaliação física no banco.'
+        read="Barra de busca e tabela abaixo — consulta e lista as avaliações cadastradas."
+        update='Botão "Editar" em cada linha — atualiza os dados de uma avaliação existente.'
+        delete='Ícone de lixeira em cada linha — remove uma avaliação do banco.'
+      />
+
       <div className="card">
         <div className="search-bar">
           <div className="search-input-wrap">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><IconSearch width={13} height={13} /></span>
             <input
               placeholder="Buscar por aluno ou instrutor..."
               value={search}
@@ -163,7 +172,7 @@ export default function AvaliacoesFisicas() {
             <div className="loading"><div className="spinner" /> Carregando...</div>
           ) : paginated.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📏</div>
+              <div className="empty-icon"><IconEmptyBox /></div>
               <p>Nenhuma avaliação encontrada</p>
             </div>
           ) : (
@@ -198,8 +207,8 @@ export default function AvaliacoesFisicas() {
                     </td>
                     <td>
                       <div className="td-actions">
-                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}>✏️ Editar</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_avaliacao)}>🗑️</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => openEdit(r)}><IconEdit width={12} height={12} /> Editar</button>
+                        <button className="btn btn-sm btn-danger" onClick={() => setConfirmId(r.id_avaliacao)}><IconTrash width={12} height={12} /></button>
                       </div>
                     </td>
                   </tr>

@@ -6,15 +6,17 @@ import Planos from './pages/Planos';
 import Matriculas from './pages/Matriculas';
 import Pagamentos from './pages/Pagamentos';
 import AvaliacoesFisicas from './pages/AvaliacoesFisicas';
+import { IconGrid, IconUser, IconBadge, IconLayers, IconClipboard, IconCoin, IconActivity } from './components/Icons';
+import LogConsole from './components/LogConsole';
 
 const navItems = [
-  { to: '/',            label: 'Dashboard',         icon: '▦',  end: true },
-  { to: '/alunos',      label: 'Alunos',             icon: '◉' },
-  { to: '/instrutores', label: 'Instrutores',        icon: '◈' },
-  { to: '/planos',      label: 'Planos',             icon: '◧' },
-  { to: '/matriculas',  label: 'Matrículas',         icon: '◫' },
-  { to: '/pagamentos',  label: 'Pagamentos',         icon: '◬' },
-  { to: '/avaliacoes',  label: 'Avaliações Físicas', icon: '◭' },
+  { to: '/',            label: 'Dashboard',         Icon: IconGrid,      end: true },
+  { to: '/alunos',      label: 'Alunos',            Icon: IconUser },
+  { to: '/instrutores', label: 'Instrutores',       Icon: IconBadge },
+  { to: '/planos',      label: 'Planos',            Icon: IconLayers },
+  { to: '/matriculas',  label: 'Matrículas',        Icon: IconClipboard },
+  { to: '/pagamentos',  label: 'Pagamentos',        Icon: IconCoin },
+  { to: '/avaliacoes',  label: 'Avaliações',        Icon: IconActivity },
 ];
 
 function Topbar() {
@@ -25,9 +27,13 @@ function Topbar() {
   return (
     <div className="topbar">
       <div className="topbar-breadcrumb">
-        <span>FitAcademia</span>
+        <span>FIT//ACADEMIA</span>
         <span style={{ color: 'var(--t3)' }}>/</span>
         <span className="current">{current?.label ?? '—'}</span>
+      </div>
+      <div className="topbar-status">
+        <span className="dot" />
+        SISTEMA ONLINE
       </div>
     </div>
   );
@@ -38,23 +44,27 @@ function AppLayout() {
     <div className="layout">
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <h1>🏆 FitAcademia</h1>
-          <p>Sistema de Gestão</p>
+          <h1>FIT//ACADEMIA</h1>
+          <p>Console de Gestão</p>
         </div>
         <nav className="sidebar-nav">
-          {navItems.map((item) => (
+          {navItems.map((item, i) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
               className={({ isActive }) => isActive ? 'active' : ''}
             >
-              <span className="nav-icon" style={{ fontSize: 14 }}>{item.icon}</span>
+              <span className="nav-index">{String(i + 1).padStart(2, '0')}</span>
+              <span className="nav-icon"><item.Icon /></span>
               {item.label}
             </NavLink>
           ))}
         </nav>
-        <div className="sidebar-footer">FitAcademia © 2026</div>
+        <div className="sidebar-footer">
+          <span>FIT//ACADEMIA © 2026</span>
+          <span className="status-dot" />
+        </div>
       </aside>
 
       <main className="main-content">
@@ -71,6 +81,8 @@ function AppLayout() {
           </Routes>
         </div>
       </main>
+
+      <LogConsole />
     </div>
   );
 }
