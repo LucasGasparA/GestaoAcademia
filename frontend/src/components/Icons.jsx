@@ -120,6 +120,15 @@ export function IconChevronDown(props) {
   );
 }
 
+export function IconChart(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 20V10M11 20V4M18 20v-7" />
+      <path d="M2.5 20.5h19" />
+    </svg>
+  );
+}
+
 export function IconEmptyBox(props) {
   return (
     <svg {...base} width={32} height={32} {...props}>

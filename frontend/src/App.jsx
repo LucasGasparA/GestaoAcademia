@@ -6,7 +6,8 @@ import Planos from './pages/Planos';
 import Matriculas from './pages/Matriculas';
 import Pagamentos from './pages/Pagamentos';
 import AvaliacoesFisicas from './pages/AvaliacoesFisicas';
-import { IconGrid, IconUser, IconBadge, IconLayers, IconClipboard, IconCoin, IconActivity } from './components/Icons';
+import Relatorios from './pages/Relatorios';
+import { IconGrid, IconUser, IconBadge, IconLayers, IconClipboard, IconCoin, IconActivity, IconChart } from './components/Icons';
 import LogConsole from './components/LogConsole';
 
 const navItems = [
@@ -17,6 +18,7 @@ const navItems = [
   { to: '/matriculas',  label: 'Matrículas',        Icon: IconClipboard },
   { to: '/pagamentos',  label: 'Pagamentos',        Icon: IconCoin },
   { to: '/avaliacoes',  label: 'Avaliações',        Icon: IconActivity },
+  { to: '/relatorios',  label: 'Relatórios',        Icon: IconChart },
 ];
 
 function Topbar() {
@@ -78,6 +80,7 @@ function AppLayout() {
             <Route path="/matriculas"  element={<Matriculas />} />
             <Route path="/pagamentos"  element={<Pagamentos />} />
             <Route path="/avaliacoes"  element={<AvaliacoesFisicas />} />
+            <Route path="/relatorios"  element={<Relatorios />} />
           </Routes>
         </div>
       </main>

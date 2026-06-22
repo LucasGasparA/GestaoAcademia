@@ -44,6 +44,7 @@ export default function Pagamentos() {
   const [matriculas, setMatriculas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
+  const [viaProcedure, setViaProcedure] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
@@ -72,8 +73,9 @@ export default function Pagamentos() {
   );
   const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-  function openNew() {
+  function openNew(procedure = false) {
     setEditing(null);
+    setViaProcedure(procedure);
     setForm({ ...EMPTY, data_vencimento: new Date().toISOString().split('T')[0] });
     setErrors({});
     setModal(true);
@@ -81,6 +83,7 @@ export default function Pagamentos() {
 
   function openEdit(row) {
     setEditing(row);
+    setViaProcedure(false);
     setForm({
       id_matricula: row.id_matricula || '',
       valor: row.valor || '',
@@ -108,6 +111,9 @@ export default function Pagamentos() {
       const payload = { ...form, valor: Number(form.valor) };
       if (editing) {
         await api.put(`/pagamentos/${editing.id_pagamento}`, payload);
+      } else if (viaProcedure) {
+        const { id_matricula, valor, data_vencimento, forma_pagamento } = payload;
+        await api.post('/pagamentos/via-procedure', { id_matricula, valor, data_vencimento, forma_pagamento });
       } else {
         await api.post('/pagamentos', payload);
       }
@@ -137,7 +143,10 @@ export default function Pagamentos() {
           <h2>Pagamentos</h2>
           <p>Controle os pagamentos das matrículas</p>
         </div>
-        <button className="btn btn-primary" onClick={openNew}>+ Novo Pagamento</button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn btn-secondary" onClick={() => openNew(true)}>+ Via Procedure</button>
+          <button className="btn btn-primary" onClick={() => openNew(false)}>+ Novo Pagamento</button>
+        </div>
       </div>
 
       <CrudLegend
@@ -215,11 +224,16 @@ export default function Pagamentos() {
         <div className="modal-overlay" onClick={e => e.target === e.currentTarget && setModal(false)}>
           <div className="modal">
             <div className="modal-header">
-              <h3>{editing ? 'Editar Pagamento' : 'Novo Pagamento'}</h3>
+              <h3>{editing ? 'Editar Pagamento' : viaProcedure ? 'Novo Pagamento (via Procedure)' : 'Novo Pagamento'}</h3>
               <button className="modal-close" onClick={() => setModal(false)}>×</button>
             </div>
             <form onSubmit={handleSave}>
               <div className="modal-body">
+                {viaProcedure && (
+                  <div className="alert" style={{ marginBottom: 16, fontFamily: 'monospace', fontSize: 12 }}>
+                    CALL pr_registrar_pagamento(id_matricula, valor, vencimento, forma)
+                  </div>
+                )}
                 {errors._global && <div className="alert alert-error">{errors._global}</div>}
                 <div className="form-grid">
                   <div className="form-group col-span-2">
@@ -252,19 +266,23 @@ export default function Pagamentos() {
                     <input name="data_vencimento" type="date" value={form.data_vencimento} onChange={handleChange} className={errors.data_vencimento ? 'error' : ''} />
                     {errors.data_vencimento && <span className="error-msg">{errors.data_vencimento}</span>}
                   </div>
-                  <div className="form-group">
-                    <label>Data de Pagamento</label>
-                    <input name="data_pagamento" type="date" value={form.data_pagamento} onChange={handleChange} />
-                  </div>
-                  <div className="form-group">
-                    <label>Status</label>
-                    <select name="status" value={form.status} onChange={handleChange}>
-                      <option value="pendente">Pendente</option>
-                      <option value="pago">Pago</option>
-                      <option value="atrasado">Atrasado</option>
-                      <option value="cancelado">Cancelado</option>
-                    </select>
-                  </div>
+                  {!viaProcedure && (
+                    <>
+                      <div className="form-group">
+                        <label>Data de Pagamento</label>
+                        <input name="data_pagamento" type="date" value={form.data_pagamento} onChange={handleChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Status</label>
+                        <select name="status" value={form.status} onChange={handleChange}>
+                          <option value="pendente">Pendente</option>
+                          <option value="pago">Pago</option>
+                          <option value="atrasado">Atrasado</option>
+                          <option value="cancelado">Cancelado</option>
+                        </select>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="modal-footer">
